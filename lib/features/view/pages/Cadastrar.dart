@@ -1,7 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:projecto_final/core/theme/App_cores.dart';
-import 'package:projecto_final/features/view/widgets/Buttao.dart';
-import 'package:projecto_final/features/view/widgets/Campo.dart';
+import 'package:teste/core/theme/App_cores.dart';
+import 'package:teste/features/view/widgets/Buttao.dart';
+import 'package:teste/features/view/widgets/Campo.dart';
+import 'package:flutter/gestures.dart';
+
 
 
 
@@ -27,6 +31,19 @@ class _CadastrarState extends State<Cadastrar> {
 
     formKey.currentState!.validate();
   }
+  Future<void> criarUsuarioComEmailESenha() async {
+    try {
+      final credenciaisDoUsuario = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim()
+      );
+      print(credenciaisDoUsuario);
+    } on FirebaseAuthException catch (erro) {
+      print(erro);
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -70,23 +87,29 @@ class _CadastrarState extends State<Cadastrar> {
               const SizedBox(height: 20),
               Buttao(
                 TextoButtao: 'Cadastro',
-                onTap: () {},
+                onTap: () async {
+                  await criarUsuarioComEmailESenha();
+                },
               ),
 
               const SizedBox(height: 20),
               RichText(
                 text: TextSpan(
-                    text: 'Ja tem uma Conta? ',
-                    style: Theme.of(context).textTheme.titleMedium,
-                    children: const [
-                      TextSpan(
-                        text:'Logar',
-                        style: TextStyle(
-                          color: Cores.gradient4,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  text: 'Já tem uma Conta? ',
+                  style: Theme.of(context).textTheme.titleMedium,
+                  children: [
+                    TextSpan(
+                      text: 'Logar',
+                      style: const TextStyle(
+                        color: Cores.gradient4,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ]
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.of(context).pushNamed('/Logar');
+                        },
+                    ),
+                  ],
                 ),
               ),
             ],

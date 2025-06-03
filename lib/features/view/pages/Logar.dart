@@ -1,7 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:projecto_final/core/theme/App_cores.dart';
-import 'package:projecto_final/features/view/widgets/Buttao.dart';
-import 'package:projecto_final/features/view/widgets/Campo.dart';
+import 'package:teste/core/theme/App_cores.dart';
+import 'package:teste/features/view/widgets/Buttao.dart';
+import 'package:teste/features/view/widgets/Campo.dart';
+import 'package:flutter/gestures.dart';
+
 
 
 class Logar extends StatefulWidget {
@@ -24,6 +27,20 @@ class _LogarState extends State<Logar> {
 
     formKey.currentState!.validate();
   }
+
+  Future<void> loginUsuarioComEmailESenha() async {
+    try{
+      final credenciais = await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim()
+      );
+      print(credenciais);
+      print("Funcionou");
+    } on FirebaseAuthException catch(erro) {
+      print(erro);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -62,23 +79,30 @@ class _LogarState extends State<Logar> {
               const SizedBox(height: 20),
               Buttao(
                 TextoButtao: 'Login',
-                onTap: () {},
+                onTap: () async {
+                  await loginUsuarioComEmailESenha();
+                },
               ),
 
               const SizedBox(height: 20),
+
               RichText(
                 text: TextSpan(
-                    text: 'Nao tem conta? ',
-                    style: Theme.of(context).textTheme.titleMedium,
-                    children:const [
-                      TextSpan(
-                        text:'Cadastrar-se ',
-                        style: TextStyle(
-                          color: Cores.gradient4,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  text: 'Não tem conta? ',
+                  style: Theme.of(context).textTheme.titleMedium,
+                  children: [
+                    TextSpan(
+                      text: 'Cadastrar-se',
+                      style: const TextStyle(
+                        color: Cores.gradient4,
+                        fontWeight: FontWeight.bold,
                       ),
-                    ]
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.of(context).pushNamed('/Cadastrar');
+                        },
+                    ),
+                  ],
                 ),
               ),
             ],
