@@ -64,3 +64,9 @@ class DenunciaViewModel extends ChangeNotifier {
     await _db.collection('denuncia').doc(id).update(data);
     notifyListeners();
   }
+
+    Future<void> apagarDenuncia(String id) async {
+    await _db.collection('denuncia').doc(id).delete();
+    notifyListeners();
+  }
+}
