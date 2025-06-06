@@ -39,3 +39,28 @@ class DenunciaViewModel extends ChangeNotifier {
       rethrow;
     }
   }
+ Future<void> criarDenuncia(String tipoBurla, String descricao, File foto) async {
+    final fotoPath = await salvarFotoLocalmente(foto);
+    await _db.collection('denuncia').add({
+      'tipoBurla': tipoBurla,
+      'descricao': descricao,
+      'fotoUrl': fotoPath,
+    });
+    notifyListeners();
+  }
+
+  Future<void> editarDenuncia(String id, String tipoBurla, String descricao, {File? novaFoto}) async {
+    String? fotoPath;
+    if (novaFoto != null) {
+      fotoPath = await salvarFotoLocalmente(novaFoto);
+    }
+
+    final data = {
+      'tipoBurla': tipoBurla,
+      'descricao': descricao,
+      if (fotoPath != null) 'fotoPath': fotoPath,
+    };
+
+    await _db.collection('denuncia').doc(id).update(data);
+    notifyListeners();
+  }
