@@ -13,7 +13,7 @@ class DenunciaViewModel extends ChangeNotifier {
   final _storage = FirebaseStorage.instance;
 
   Stream<List<Denuncia>> getDenuncias() {
-    return _db.collection('denuncia').snapshots().map((snapshot) =>
+    return _db.collection('Denuncia').snapshots().map((snapshot) =>
         snapshot.docs.map((doc) => Denuncia.fromMap(doc.id, doc.data())).toList());
   }
 
@@ -24,7 +24,7 @@ class DenunciaViewModel extends ChangeNotifier {
 
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final denunciaDir = Directory(path.join(directory.path, 'denuncia'));
+      final denunciaDir = Directory(path.join(directory.path, 'Denuncia'));
       if (!await denunciaDir.exists()) {
         await denunciaDir.create(recursive: true);
       }
@@ -39,34 +39,39 @@ class DenunciaViewModel extends ChangeNotifier {
       rethrow;
     }
   }
- Future<void> criarDenuncia(String tipoBurla, String descricao, File foto) async {
+
+  Future<void> criarDenuncia(String titulo, String descricao, File foto, UserDataViewModel userData) async {
     final fotoPath = await salvarFotoLocalmente(foto);
-    await _db.collection('denuncia').add({
-      'tipoBurla': tipoBurla,
+    await _db.collection('Denuncia').add({
+      'titulo': titulo,
       'descricao': descricao,
-      'fotoUrl': fotoPath,
+      'imagemUrl': fotoPath,
+      'autorId': userData.uid,
+      'autorNome': userData.nome,
+      'data': DateTime.now(),
     });
     notifyListeners();
   }
 
-  Future<void> editarDenuncia(String id, String tipoBurla, String descricao, {File? novaFoto}) async {
+
+  Future<void> editarDenuncia(String id, String titulo, String descricao, {File? novaFoto}) async {
     String? fotoPath;
     if (novaFoto != null) {
       fotoPath = await salvarFotoLocalmente(novaFoto);
     }
 
     final data = {
-      'tipoBurla': tipoBurla,
+      'titulo': titulo,
       'descricao': descricao,
-      if (fotoPath != null) 'fotoPath': fotoPath,
+      if (fotoPath != null) 'imagemUrl': fotoPath,
     };
 
-    await _db.collection('denuncia').doc(id).update(data);
+    await _db.collection('Denuncia').doc(id).update(data);
     notifyListeners();
   }
 
-    Future<void> apagarDenuncia(String id) async {
-    await _db.collection('denuncia').doc(id).delete();
+  Future<void> apagarDenuncia(String id) async {
+    await _db.collection('Denuncia').doc(id).delete();
     notifyListeners();
   }
 }
