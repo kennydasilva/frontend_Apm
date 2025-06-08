@@ -23,7 +23,13 @@ class MainApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => AuthViewModel()),
+        //ChangeNotifierProvider(create: (_) => DenunciaViewModel()),
+        ChangeNotifierProvider(create: (_) => FeedViewModel()),
+        //ChangeNotifierProvider(create: (_) => ComentarioViewModel()),
+        ChangeNotifierProvider(create: (_) => ProfileViewModel()),
+        ChangeNotifierProvider(create: (_) => UserDataViewModel()),
         ChangeNotifierProvider(create: (_) => DenunciaViewModel()),
+        ChangeNotifierProvider(create: (_) => NotificacaoViewModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
