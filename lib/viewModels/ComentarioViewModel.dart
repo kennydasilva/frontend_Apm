@@ -1,16 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:version3_firebase/models/Comentario.dart';
-import 'package:version3_firebase/models/Notificacao.dart';
-import 'package:version3_firebase/models/denucias.dart';
-import 'package:version3_firebase/viewmodels/NotificacaoViewModel.dart';
-import 'package:version3_firebase/viewmodels/UserDataViewModel.dart';
-import 'package:version3_firebase/views/DenunciaFormPage.dart';
 
 
 class ComentarioViewModel {
   final _db = FirebaseFirestore.instance;
 
-  Stream<List<Comentario>> getComentarios(String postId) {
+  Stream<List<ComentarioViewModel>> getComentarios(String postId) {
     return _db
         .collection('posts')
         .doc(postId)
@@ -18,7 +12,7 @@ class ComentarioViewModel {
         .orderBy('data')
         .snapshots()
         .map((snapshot) => snapshot.docs
-        .map((doc) => Comentario.fromMap(doc.id, doc.data()))
+        .map((doc) => ComentarioViewModel.fromMap(doc.id, doc.data()))
         .toList());
   }
 
