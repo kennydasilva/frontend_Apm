@@ -1,16 +1,18 @@
-import 'package:apm/features/view/widgets/Buttao.dart' show Buttao;
-import 'package:apm/views/DenunciaListPage.dart';
+import 'package:apm/features/widgets/buttao.dart';
+import 'package:apm/features/widgets/campo.dart';
+import 'package:apm/viewModels/auth_viewModel.dart';
+import 'package:apm/view/Login.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../viewmodels/auth_viewmodel.dart';
-import 'register_page.dart';
-import 'package:apm/features/view/widgets/Campo.dart';
 
-class LoginPage extends StatelessWidget {
+
+
+class RegisterPage extends StatelessWidget {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final nomeController = TextEditingController();
 
-  LoginPage({super.key});
+  RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,26 +25,28 @@ class LoginPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Login.', style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold)),
+            const Text('SIDPA', style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold, color:  Color.fromRGBO(92, 198, 186, 1.0))),
             const SizedBox(height: 30),
             Campos(hintText: "Email", controller: emailController),
+            const SizedBox(height: 15),
+            Campos(hintText: "nome", controller: nomeController),
             const SizedBox(height: 15),
             Campos(hintText: "Password", controller: passwordController, isTextoOculto: true),
             const SizedBox(height: 20),
             Buttao(
-              TextoButtao: 'Login',
+              TextoButtao: 'Cadastro',
               onTap: () async {
-                await authVM.login(emailController.text, passwordController.text);
+                await authVM.register(emailController.text, passwordController.text,nomeController.text);
                 if (authVM.currentUser != null) {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => DenunciaListPage()));
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => LoginPage()));
                 }
               },
             ),
             const SizedBox(height: 20),
             TextButton(
-              child: const Text('Não tem conta? Cadastrar-se'),
+              child: const Text('Já tem uma Conta? Logar',   style: TextStyle(color: Color.fromRGBO(92, 198, 186, 1.0)),),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (_) => RegisterPage()));
+                Navigator.pop(context);
               },
             ),
           ],

@@ -1,8 +1,11 @@
+import 'package:apm/models/denuncia_model.dart';
+import 'package:apm/viewModels/denunciaViewModel.dart';
+import 'package:apm/view/denuncia_FormPage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:apm/models/denuncia_model.dart';
-import 'package:apm/viewmodels/DenunciaViewModel.dart';
-import 'package:apm/views/DenunciaFormPage.dart';
+import 'dart:io';
+
+
 
 
 
@@ -24,8 +27,8 @@ class DenunciaListPage extends StatelessWidget {
             itemBuilder: (context, i) {
               final d = denuncias[i];
               return ListTile(
-                leading: Image.network(d.fotoUrl, width: 50, height: 50, fit: BoxFit.cover),
-                title: Text(d.tipoBurla),
+                leading: Image.file(File(d.imagemUrl), width: 50, height: 50, fit: BoxFit.cover),
+                title: Text(d.titulo),
                 subtitle: Text(d.descricao),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
