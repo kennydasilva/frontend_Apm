@@ -36,8 +36,13 @@ class MainApp extends StatelessWidget {
         initialRoute: '/login',
         routes: {
           '/login': (_) => LoginPage(),
-          '/denucias': (_) => DenunciaListPage(),
-          'denucias': (_) => DenunciaListPage(),
+          //'/denucias': (_) => DenunciaListPage(),
+          //'/home': (_) => DenunciaListPage(),
+          'feed': (_) => FeedPage(),
+          '/perfil': (context) => ProfilePage(),
+          '/criar_denuncia': (_) => DenunciaFormPage(),
+          '/notificacoes': (context) => NotificacoesPage(),
+
         },
       ),
     );
